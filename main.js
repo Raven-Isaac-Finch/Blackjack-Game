@@ -1,66 +1,73 @@
-// const computerBoard = document.getElementById('computer-cards');
-// const playerBoard = document.getElementById('player-cards');
 
-// const dealBtn = document.getElementById('hit-btn');
-// const stayBtn = document.getElementById('stay-btn');
-
-// let playerPoint = 0;
-// let computerPoint = 0;
-
-// function firstDeal(who, whose) {
-//     fetch('https://deckofcardsapi.com/api/deck/new/draw/?count=1')
-//         .then(res => res.json())
-//         .then(data => {
-//             let cardValue = data.cards[0].value;
-//             who.innerHTML = `<p class="drawn-card">${cardValue}</p>`
-//             pointsCheck(whose, cardValue);
-//         });
-// }
-
-// dealBtn.addEventListener('click', () => {
-//     fetch('https://deckofcardsapi.com/api/deck/new/draw/?count=1')
-//         .then(res => res.json())
-//         .then(data => {
-//             let cardValue = data.cards[0].value;
-//             let newCard = document.createElement('p');
-//             newCard.classList = "drawn-card";
-//             newCard.textContent = `${cardValue}`
-//             playerBoard.appendChild(newCard);
-//             pointsCheck(playerPoint, cardValue);
-//         });
-// });
-
-// function pointsCheck(whose, cardValue) {
-//     if(isNaN(cardValue)) {
-//         whose += 10;
-//     } else {
-//         whose += parseInt(cardValue);
-//     }
-// }
-
-// firstDeal(computerBoard, computerPoint);
-// firstDeal(playerBoard, playerPoint);
 
 //************************************************************ */
 
+const computerBoard = document.getElementById('computer-cards');
+const playerBoard = document.getElementById('player-cards');
+
+const dealBtn = document.getElementById('hit-btn');
+const stayBtn = document.getElementById('stay-btn');
+
 let playerPoint = 0;
 let computerPoint = 0;
+let checkCounter = 0;
 
-const startGame = async (whose) => {
-    let url = `https://deckofcardsapi.com/api/deck/new/draw/?count=1`;
-    let res = await fetch(url);
-    let data = await res.json();
-    let cardValue = data.cards[0].value;
-    // who.innerHTML = `<p class="drawn-card">${cardValue}</p>`
-    // pointsCheck(whose, cardValue);
-    if(isNaN(cardValue)) {
-        whose += 10;
-    } else {
-        whose += parseInt(cardValue);
+function startGame() {
+    deal(computerBoard);
+    deal(computerBoard);
+    deal(playerBoard);
+    deal(playerBoard);
+
+    dealBtn.addEventListener('click', () => {deal(playerBoard)});
+
+
+    
+};
+
+function deal(forWho) {
+    fetch('https://deckofcardsapi.com/api/deck/os1rrc309dl2/draw/?count=1')
+        .then(res => res.json())
+        .then(data => {
+            let cardValue = data.cards[0].value;
+            let card = document.createElement('p');
+            card.classList = "drawn-card";
+            card.textContent = `${cardValue}`;
+            forWho.appendChild(card);
+            checkCounter += 1;
+
+            if(isNaN(cardValue) && cardValue !== "ACE" ) {
+                forWho == playerBoard ? playerPoint += 10 : computerPoint += 10;
+            } else if(cardValue === "ACE" ) {
+                forWho == playerBoard ? playerPoint += 11 : computerPoint += 11;
+            } else {
+                forWho == playerBoard ? playerPoint += parseInt(cardValue) : computerPoint += parseInt(cardValue);
+            }
+
+            blackjackCheck();
+
+            console.log(data.remaining);
+            console.log(`playerPoint: ${playerPoint}`);
+            console.log(`computerPoint: ${computerPoint}`);
+        });
+};
+
+function shuffleDeck() {
+    fetch('https://deckofcardsapi.com/api/deck/os1rrc309dl2/shuffle');
+};
+
+function blackjackCheck() {
+    if(checkCounter === 4 && playerPoint === 21 && computerPoint !== 21) {
+        alert("You Won! You Have Blackjack!");
+    } else if(checkCounter === 4 && playerPoint !== 21 && computerPoint === 21) {
+        alert("You Lost! Computer Has Blackjack!");
     }
 }
 
-startGame(playerPoint);
-console.log(playerPoint);
-// startGame(computerPoint);
+function loseCheck() {
+    if(playerPoint >= 21) {
+        alert("You Lost!");
+    }
+}
 
+shuffleDeck();
+const gameTimeout = setTimeout(startGame, 500);
