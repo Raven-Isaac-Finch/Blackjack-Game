@@ -25,7 +25,7 @@ main {
 #player {
     background-color: #e7e7e7;
     border-radius: 15px;
-    height: 30%;
+    height: 50%;
     width: 30%;
     display: flex;
     justify-content: space-around;
@@ -36,13 +36,34 @@ main {
 .btn {
     border: 0;
     outline: 0;
-    padding: 15px 30px;
+    height: 80px;
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-.btn:hover {
+#btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn:hover:not([disabled]) {
     background-color: #e7e7e7;
+    cursor: pointer;
 }
 
 .btn:active {
     transform: scale(0.95, 0.95);
+}
+
+#notif-text {
+    height: 1.2rem;
+}
+
+.btn span {
+    font-size: 0.5rem;
+    color: red;
 }

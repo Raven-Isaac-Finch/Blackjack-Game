@@ -9,6 +9,9 @@
     <script src="main.js" defer></script>
 </head>
 <body>
+    <div id="notifications">
+        <p id="notif-text"></p>
+    </div>  
     <main>
         <div id="computer">
             <h2>AI</h2>
@@ -24,8 +27,12 @@
         </div>
     </main>
     <div id="btn-container">
+        <button id="reset-btn" class="btn" disabled>Again!</button>
         <button id="hit-btn" class="btn">Hit</button>
         <button id="stay-btn" class="btn">Stay</button>
-    </div>  
+        <button id="doubleDown-btn" class="btn" disabled>Double Down<span>(Coming Soon!)</span></button>
+        <button id="split-btn" class="btn" disabled>Split<span>(Coming Soon!)</span></button>
+    </div>
+    
 </body>
 </html>
