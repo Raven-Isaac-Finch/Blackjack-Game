@@ -16,12 +16,9 @@ const dealClickFunction = () => {deal(playerBoard)};
 const stayClickFunction = () => {
     dealBtn.disabled = true;
     stayBtn.disabled = true;
-    if(computerPoint <= 15) {
-        deal(computerBoard);
-    } else if(computerPoint < playerPoint) {
-        deal(computerBoard);
-    }
-    theWinnerCheck();
+    setTimeout(computerDecides, 1000);
+    
+    setTimeout(theWinnerCheck, 2000);
 };
 
 function startGame() {
@@ -29,8 +26,6 @@ function startGame() {
     deal(computerBoard);
     deal(playerBoard);
     deal(playerBoard);
-
-      
 
     dealBtn.addEventListener('click', dealClickFunction);
     stayBtn.addEventListener('click', stayClickFunction);    
@@ -41,9 +36,9 @@ function deal(forWho) {
         .then(res => res.json())
         .then(data => {
             let cardValue = data.cards[0].value;
-            let card = document.createElement('p');
-            card.classList = "drawn-card";
-            card.textContent = `${cardValue}`;
+            let cardImage = data.cards[0].image;
+            let card = document.createElement('img');
+            card.src = cardImage;
             forWho.appendChild(card);
             checkCounter += 1;
 
@@ -67,6 +62,10 @@ function deal(forWho) {
             console.log(data.remaining);
             console.log(`playerPoint: ${playerPoint}`);
             console.log(`computerPoint: ${computerPoint}`);
+
+            if(checkCounter > 5 && forWho == computerBoard) {
+                setTimeout(computerDecides, 1000);
+            }
         });
 };
 
@@ -112,15 +111,17 @@ function loseCheck() {
 }
 
 function theWinnerCheck() {
-    if(computerPoint > playerPoint) {
-        notifText.textContent = "You lost! Computer Has More Points"
+    if(computerPoint > playerPoint && computerPoint <= 21) {
+        notifText.textContent = "You lost! Computer Has More Points";
         fixBtns();
     } else if(playerPoint > computerPoint) {
-        notifText.textContent = "You lost! Computer Has More Points"
+        notifText.textContent = "You Won! You Have More Points";
         fixBtns();
     } else if(playerPoint == computerPoint) {
         notifText.textContent = "It is a Tie!";
         fixBtns();
+    } else {
+        return;
     }
 }
 
@@ -146,13 +147,26 @@ function fixBtns() {
     stayBtn.disabled = true;
 }
 
+function computerDecides() {
+    console.log(`Stupid Computer Has ${computerPoint}`);
+    if(computerPoint < 21) {
+        if(computerPoint < playerPoint) {
+            deal(computerBoard);
+        } else if(computerPoint <= 15 && computerPoint < playerPoint) {
+            deal(computerBoard);
+        } else {
+            return;
+        }
+    } else {
+        return;
+    }
+}
+
 resetBtn.addEventListener('click', () => {
     clearGame();
     shuffleDeck();
     const gameTimeout = setTimeout(startGame, 500);
-    gameTimeout();
 });
 
 shuffleDeck();
 const gameTimeout = setTimeout(startGame, 500);
-gameTimeout();
