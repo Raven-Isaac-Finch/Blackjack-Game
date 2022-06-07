@@ -87,3 +87,14 @@ img {
     justify-content: center;
     align-items: center;
 }
+
+@media (max-width: 820px) {
+    main {
+        width: 100vw;
+        flex-direction: column;
+    }
+    #split-btn,
+    #doubleDown-btn {
+        display: none;
+    }
+}
