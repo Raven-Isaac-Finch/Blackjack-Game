@@ -97,4 +97,12 @@ img {
     #doubleDown-btn {
         display: none;
     }
+    #player,
+    #computer {
+        width: 100vw;
+    }
+    #notif-text {
+        height: 1.2rem;
+        font-size: 1rem;
+    }
 }
